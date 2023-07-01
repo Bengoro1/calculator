@@ -20,7 +20,7 @@ body {
 
 .container {
     width: 360px;
-    height: 450px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -45,7 +45,7 @@ body {
     border-radius: 8px;
     color: white;
     font-family: 'Orbitron', sans-serif;
-    font-size: 48px;
+    font-size: 20px;
     
 }
 
@@ -62,7 +62,7 @@ body {
 
 #delete,
 #clear {
-    height: 45px;
+    height: 70px;
     margin: 0;
     margin-left: 8px;
     font-size: 35px;
@@ -76,6 +76,12 @@ body {
 }
 
 #input {
-    font-size: 20px;    
+    font-size: 48px;    
 }
 
+.display-container {
+    display: flex;
+    flex-direction: column;    
+    justify-content: space-between;
+    height: 100%;
+}
