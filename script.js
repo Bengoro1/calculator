@@ -28,7 +28,7 @@ function operate() {
             secondNumber = substract(a,b);
         } else if(operator === divided) {
             if(secondNumber === 0) {
-                result.textContent = 'Nice try!';
+                secondNumber = 'Nice try!';
                 return null
             } else {
                 secondNumber = divide(a,b);
@@ -47,22 +47,45 @@ function operate() {
     input.textContent = '';
 }
 
-const numbers = document.querySelectorAll('.number');
-numbers.forEach((number) => {
-    number.addEventListener('click', () => {
-        secondNumber += number.textContent;
-        input.textContent = secondNumber;
+const buttons = document.querySelectorAll('.button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        checkNumberEvent();
     });
 });
 
+const numbers = document.querySelectorAll('.number');
+
+function checkNumberEvent() {
+    if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true') {
+        for (let i = 0; i < numbers.length; i++) {
+            numbers[i].setAttribute('listener', 'true');
+            numbers[i].addEventListener("click", numberEvent);
+        }
+    } else if (input.textContent.length >= 15 && numbers[0].getAttribute('listener') === 'true') {
+        for (let i = 0; i < numbers.length; i++) {
+            numbers[i].removeAttribute('listener', 'true');
+            numbers[i].removeEventListener('click', numberEvent);
+        }
+    }
+}
+
+function numberEvent(e) {
+    secondNumber += e.currentTarget.textContent;
+    input.textContent = secondNumber;
+    e.currentTarget.setAttribute('listener', 'true');
+}
+
 const operators = document.querySelectorAll('.operator');
 operators.forEach((opers) => {
-    opers.addEventListener('click', () => {
-        operate();
-        operator = opers;
-        result.textContent += ' ' + opers.textContent;
-    });
+    opers.addEventListener('click', operatorEvent);
 });
+
+function operatorEvent(e) {
+    operate();
+    operator = e.currentTarget;
+    result.textContent += ' ' + e.currentTarget.textContent;
+}
 
 const equal = document.getElementById('equal');
 equal.addEventListener('click', () => {
@@ -78,10 +101,32 @@ del.addEventListener('click', () => {
 });
 
 const clear = document.getElementById('clear');
-clear.addEventListener('click', () => {
+clear.addEventListener('click', clearDisplay);
+
+function clearDisplay() {
     firstNumber = '';
     secondNumber = '';
     operator = '';
     input.textContent = '';
     result.textContent = '';
-});
+}
+// function getFloored() {   
+//     for (let i = 17; i > checkFlooredLength(result.textContent); i--) {
+//         floored *= 10;
+//     } 
+// }
+
+// let temporaryFloored;
+
+// function checkLength(val) {
+//     return val.toString().length;
+// }
+
+// function checkFlooredLength(val) {
+//     temporaryFloored = Math.floor(val);
+//     return checkLength(temporaryFloored);
+// }
+
+// removeEventListener in forEach if conditions are met 
+// check for point in input removeEventListener
+
