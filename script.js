@@ -51,6 +51,7 @@ const buttons = document.querySelectorAll('.button');
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
         checkNumberEvent();
+        checkOperatorEvent();
     });
 });
 
@@ -73,18 +74,24 @@ function checkNumberEvent() {
 function numberEvent(e) {
     secondNumber += e.currentTarget.textContent;
     input.textContent = secondNumber;
-    e.currentTarget.setAttribute('listener', 'true');
 }
 
 const operators = document.querySelectorAll('.operator');
-operators.forEach((opers) => {
-    opers.addEventListener('click', operatorEvent);
-});
+
+function checkOperatorEvent() {
+    for (let i = 0; i < operators.length; i++) {
+        operators[i].addEventListener('click', operatorEvent);
+    }
+}
 
 function operatorEvent(e) {
+    if (e.currentTarget === operator) {
+        e.currentTarget.removeEventListener('click', operatorEvent);
+        return;
+    }
     operate();
     operator = e.currentTarget;
-    result.textContent += ' ' + e.currentTarget.textContent;
+    result.textContent = firstNumber + ' ' + operator.textContent;
 }
 
 const equal = document.getElementById('equal');
@@ -110,8 +117,19 @@ function clearDisplay() {
     input.textContent = '';
     result.textContent = '';
 }
+
+const point = document.getElementById('point');
+point.addEventListener('click', () => {
+    if (input.textContent.includes('.') !== true && input.textContent !== '') {
+        secondNumber += point.textContent;
+        input.textContent = secondNumber;
+    }
+});
+
+checkNumberEvent();
+checkOperatorEvent();
 // function getFloored() {   
-//     for (let i = 17; i > checkFlooredLength(result.textContent); i--) {
+    //     for (let i = 17; i > checkFlooredLength(result.textContent); i--) {
 //         floored *= 10;
 //     } 
 // }
