@@ -24,7 +24,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-self: center;
-    align-content: center;
     border: 4px solid cyan;
     border-radius: 8px;
     padding: 8px;
@@ -58,6 +57,9 @@ body {
 .button {
     margin: 4px;
     cursor: pointer;
+    color: orange;
+    background-color: black;
+    border: 1px gray solid;
 }
 
 #delete,
@@ -69,10 +71,12 @@ body {
 }
 
 #result,
-#input {   
-    margin: 0;
+#input,
+#equation {   
+    margin: 0 0 0 8px;
     display: flex;    
     justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 #input {
@@ -84,4 +88,9 @@ body {
     flex-direction: column;    
     justify-content: space-between;
     height: 100%;
+}
+
+#equal {
+    color: black;
+    background-color: orange;
 }

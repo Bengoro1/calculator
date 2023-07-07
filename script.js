@@ -17,6 +17,7 @@ function multiply(a, b) {
 let firstNumber = '';
 let secondNumber = '';
 let operator;
+let floored = 1;
 
 function operate() {
     if(firstNumber !== '' && +input.textContent !== NaN && secondNumber !== '') {
@@ -27,35 +28,40 @@ function operate() {
         } else if(operator === minus) {
             secondNumber = substract(a,b);
         } else if(operator === divided) {
-            if(secondNumber === 0) {
-                secondNumber = 'Nice try!';
-                return null
+            if(b === 0) {
+                clearDisplay();
+                result.textContent = 'Nice try!';
+                return
             } else {
                 secondNumber = divide(a,b);
             }
         } else if(operator === times) {
             secondNumber = multiply(a,b);
         }
-        result.textContent = `${a} ${operator.textContent} ${b} = \r ${secondNumber}` 
+        getFloored();
+        equation.textContent = `${a} ${operator.textContent} ${b} =`
+        secondNumber = Math.floor(secondNumber * floored) / floored;
+        if(secondNumber.toString().length > 16) {
+            clearDisplay();
+            result.textContent = 'ERROR';
+            return
+        }
+        result.textContent = secondNumber;
         firstNumber = secondNumber;
         secondNumber = '';
     } else if(firstNumber === '') {
         result.textContent = secondNumber
         firstNumber = secondNumber;
         secondNumber = '';
-    }  
+    }
+    floored = 1;
     input.textContent = '';
+    fontSize(equation);
+    fontSize(result);
 }
 
-const buttons = document.querySelectorAll('.button');
-buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-        checkNumberEvent();
-        checkOperatorEvent();
-    });
-});
-
 const numbers = document.querySelectorAll('.number');
+const displayContent = document.querySelectorAll('.display-content');
 
 function checkNumberEvent() {
     if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true') {
@@ -80,13 +86,17 @@ const operators = document.querySelectorAll('.operator');
 
 function checkOperatorEvent() {
     for (let i = 0; i < operators.length; i++) {
-        operators[i].addEventListener('click', operatorEvent);
+        if(operators[i].getAttribute('listener') !== 'true') {
+            operators[i].addEventListener('click', operatorEvent, true);
+            operators[i].setAttribute('listener', 'true')
+        }
     }
 }
 
 function operatorEvent(e) {
-    if (e.currentTarget === operator) {
-        e.currentTarget.removeEventListener('click', operatorEvent);
+    if (e.currentTarget === operator && secondNumber === '') {
+        e.currentTarget.removeAttribute('listener', 'true');
+        e.currentTarget.removeEventListener('click', operatorEvent, true);
         return;
     }
     operate();
@@ -116,6 +126,7 @@ function clearDisplay() {
     operator = '';
     input.textContent = '';
     result.textContent = '';
+    equation.textContent = '';
 }
 
 const point = document.getElementById('point');
@@ -127,24 +138,34 @@ point.addEventListener('click', () => {
 });
 
 checkNumberEvent();
-checkOperatorEvent();
-// function getFloored() {   
-    //     for (let i = 17; i > checkFlooredLength(result.textContent); i--) {
-//         floored *= 10;
-//     } 
-// }
 
-// let temporaryFloored;
+function getFloored() {   
+    checkFlooredLength(secondNumber)
+    for (let i = 15; i > temporaryFloored.toString().length; i--) {
+        floored *= 10;
+    } 
+}
 
-// function checkLength(val) {
-//     return val.toString().length;
-// }
+let temporaryFloored;
 
-// function checkFlooredLength(val) {
-//     temporaryFloored = Math.floor(val);
-//     return checkLength(temporaryFloored);
-// }
+function checkFlooredLength(val) {
+    temporaryFloored = Math.floor(val);
+    return temporaryFloored.toString().length;
+}
 
-// removeEventListener in forEach if conditions are met 
-// check for point in input removeEventListener
+function fontSize(val) {
+    if(val.textContent.length >= 10) {
+        val.style.fontSize = '20px';
+    } else if (val.textContent.length >= 6) {
+        val.style.fontSize = '30px';
+    } else {val.style.fontSize = '48px';}
+}
 
+const buttons = document.querySelectorAll('.button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        checkOperatorEvent();
+        checkNumberEvent();
+        fontSize(input);
+    });
+});
