@@ -64,7 +64,7 @@ const numbers = document.querySelectorAll('.number');
 const displayContent = document.querySelectorAll('.display-content');
 
 function checkNumberEvent() {
-    if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true' || operator !== 'noOperator') {
+    if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true' && operator !== 'noOperator') {
         for (let i = 0; i < numbers.length; i++) {
             numbers[i].setAttribute('listener', 'true');
             numbers[i].addEventListener("click", numberEvent);
@@ -213,7 +213,6 @@ buttons.forEach((button) => {
 
 window.addEventListener('keydown', keyboardInput)
 function keyboardInput(e) {
-    console.log(e.key);
     for (let i = 0; i < buttons.length; i++) {
         if (buttons[i].dataset.index === e.key) {
             buttons[i].click();
@@ -223,5 +222,3 @@ function keyboardInput(e) {
         equal.click();
     }
 }
-//equal.click()
-//if operator === '' {numbers.removeEventListener}
