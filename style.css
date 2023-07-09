@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Orbitron:wght@700&display=swap');
 html {
-    height: 98%;
+    height: 100%;
 }
 
 body {
@@ -16,11 +16,16 @@ body {
     height: 80px;
     font-family: 'Great Vibes', cursive;
     font-size: 70px;
+    margin: 4px;
+    cursor: pointer;
+    color: orange;
+    background-color: black;
+    border: 1px gray solid;
 }
 
 .container {
     width: 360px;
-    height: 500px;
+    height: 515px;
     display: flex;
     flex-direction: column;
     justify-self: center;
@@ -54,17 +59,8 @@ body {
     flex-direction: column;
 }
 
-.button {
-    margin: 4px;
-    cursor: pointer;
-    color: orange;
-    background-color: black;
-    border: 1px gray solid;
-}
-
-#delete,
+#del,
 #clear {
-    height: 70px;
     margin: 0;
     margin-left: 8px;
     font-size: 35px;

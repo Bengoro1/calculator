@@ -64,12 +64,12 @@ const numbers = document.querySelectorAll('.number');
 const displayContent = document.querySelectorAll('.display-content');
 
 function checkNumberEvent() {
-    if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true') {
+    if(input.textContent.length < 15 && numbers[0].getAttribute('listener') !== 'true' || operator !== 'noOperator') {
         for (let i = 0; i < numbers.length; i++) {
             numbers[i].setAttribute('listener', 'true');
             numbers[i].addEventListener("click", numberEvent);
         }
-    } else if (input.textContent.length >= 15 && numbers[0].getAttribute('listener') === 'true') {
+    } else if (input.textContent.length >= 15 && numbers[0].getAttribute('listener') === 'true' || operator === 'noOperator') {
         for (let i = 0; i < numbers.length; i++) {
             numbers[i].removeAttribute('listener', 'true');
             numbers[i].removeEventListener('click', numberEvent);
@@ -104,14 +104,7 @@ function operatorEvent(e) {
     result.textContent = firstNumber + ' ' + operator.textContent;
 }
 
-const equal = document.getElementById('equal');
-equal.addEventListener('click', () => {
-    if (firstNumber !== '' && secondNumber !== '') {
-        operate();
-    }
-});
-
-const del = document.getElementById('delete');
+const del = document.getElementById('del');
 del.addEventListener('click', () => {
     input.textContent = input.textContent.slice(0, -1);
     secondNumber = input.textContent;
@@ -128,6 +121,14 @@ function clearDisplay() {
     result.textContent = '';
     equation.textContent = '';
 }
+
+const equal = document.getElementById('equal');
+equal.addEventListener('click', () => {
+    if (firstNumber !== '' && secondNumber !== '') {
+        operate();
+    }
+    operator = 'noOperator';
+});
 
 const point = document.getElementById('point');
 point.addEventListener('click', () => {
@@ -156,16 +157,71 @@ function checkFlooredLength(val) {
 function fontSize(val) {
     if(val.textContent.length >= 10) {
         val.style.fontSize = '20px';
-    } else if (val.textContent.length >= 6) {
+    } else if (val.textContent.length >= 7) {
         val.style.fontSize = '30px';
     } else {val.style.fontSize = '48px';}
 }
 
+function changeColor(val) {
+    val.style.color = 'black';
+    val.style.backgroundColor = 'orange';
+    setTimeout(() => {
+        val.style.color = 'orange';
+        val.style.backgroundColor = 'black';
+    }, 100);
+    if (val === equal) {
+        val.style.color = 'orange';
+        val.style.backgroundColor = 'black';
+        setTimeout(() => {
+            val.style.color = 'black';
+            val.style.backgroundColor = 'orange';
+        }, 100);
+    }
+}
+
 const buttons = document.querySelectorAll('.button');
 buttons.forEach((button) => {
+    switch(button) {
+        case del:
+            button.dataset.index = 'Backspace';
+            break;
+        case clear:
+            button.dataset.index = 'Escape';
+            break;
+        case divided:
+            button.dataset.index = '/';
+            break;
+        case times:
+            button.dataset.index = '*';
+            break;
+        case minus:
+            button.dataset.index = '-';
+            break;
+        case plus:
+            button.dataset.index = '+';
+            break;
+        default:
+            button.dataset.index = button.textContent;
+    }
     button.addEventListener('click', () => {
         checkOperatorEvent();
         checkNumberEvent();
         fontSize(input);
+        changeColor(button);
     });
 });
+
+window.addEventListener('keydown', keyboardInput)
+function keyboardInput(e) {
+    console.log(e.key);
+    for (let i = 0; i < buttons.length; i++) {
+        if (buttons[i].dataset.index === e.key) {
+            buttons[i].click();
+        }
+    }
+    if (e.key === 'Enter') {
+        equal.click();
+    }
+}
+//equal.click()
+//if operator === '' {numbers.removeEventListener}
